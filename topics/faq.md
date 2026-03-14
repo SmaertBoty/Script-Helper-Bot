@@ -1,0 +1,1 @@
+https://sam-ple.github.io/minescript-sample/docs/FAQ.html

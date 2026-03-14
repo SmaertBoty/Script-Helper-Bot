@@ -1,0 +1,1 @@
+https://sam-ple.github.io/minescript-sample/docs/FAQ.html#%EF%B8%8F-how-can-i-enable-autocomplete-in-vs-code

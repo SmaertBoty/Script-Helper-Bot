@@ -1,0 +1,1 @@
+The minescript server does not support piracy. Don't expect any support relating to cracked clients/launchers.

@@ -1,0 +1,1 @@
+https://github.com/n-aoH/Minescript-Overviews/blob/main/Recommendations/AI%20Usage.md
