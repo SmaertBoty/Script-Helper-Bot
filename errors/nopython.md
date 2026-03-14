@@ -1,0 +1,7 @@
+Quick Resolution Found!
+
+Minescript cannot find your python instalation.
+
+You can type `where python` or `where python3` in the terminal to locate it. Then make sure that filepath matches the one in `minecraft/minescript/config.txt`
+
+*On windows? The default python that ships will not actually work. Install it fully from the microsoft store (reccommended) or from [python.org](<https://www.python.org/downloads/>)*

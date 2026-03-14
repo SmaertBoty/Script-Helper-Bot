@@ -1,1 +1,2 @@
-# Thanks for installing!
+# Thanks for adding this bot to your server!
+

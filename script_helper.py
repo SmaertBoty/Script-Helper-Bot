@@ -4,6 +4,18 @@ import os
 from dotenv import load_dotenv
 
 
+
+
+error_conversions = {"return future_value.wait()":"nomappings",
+                     "java.lang.ClassNotFoundException:":"nomappings",
+                     "error code -1073741515":"nodll",
+                     "name 'JavaClass' is not defined":"notpyjinn",
+                     "Exited with error code 9009":"nopython",
+                     "ModuleNotFoundError: No module named ":"nomodule"}
+
+
+common_community_modules = ["minescript_plus", "lib_ren", "java", "lib_java"]
+
 files = os.listdir("topics")
 topics = []
 for topic in files:
@@ -65,6 +77,38 @@ async def format(ctx):
             pass
     else:
         await ctx.send("Respond to a message to use this command.")
+    
+@bot.command(name="quickfix")
+async def quickfix(ctx):
+    msg = ctx.message
+    original_message = None
+    
+    if msg.reference:
+        try: 
+            
+            original_message = msg.reference.resolved
+
+            if original_message is None:
+            
+                original_message = await msg.channel.fetch_message(msg.reference.message_id)
+
+
+        except:
+            pass
+    
+    if original_message is None:
+        lines = msg.content.splitlines()
+    else:
+        lines = original_message.content.splitlines()
+
+    for line in lines:
+        for key in error_conversions.keys():
+            if key in line:
+                with open("errors/"+error_conversions[key]+".md","r") as f:
+                    await ctx.send(f.read())
+                    return
+    
+    await ctx.send("Hmm.. nothing in the common error catologue.")
     
 
 # Main entry point
