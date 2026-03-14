@@ -1,0 +1,1 @@
+The official Minescript github is available [here.](<https://github.com/maxuser0/minescript>)

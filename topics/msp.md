@@ -7,4 +7,4 @@ Minescript Plus [Legacy Branch](<https://github.com/R4z0rX/minescript-scripts/tr
 If you choose to use the legacy branch, you must install the `lib_java` module from the [minescript website.](<https://minescript.net/downloads>)
 
 Q: When will MSP be updated to work on X version?
-A: Soon:tm:
+A: Later:tm:

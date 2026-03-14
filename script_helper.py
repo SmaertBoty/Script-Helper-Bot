@@ -48,9 +48,24 @@ async def refresh(ctx):
     topics = []
     for topic in files:
         topics.append(topic.removesuffix(".md"))
-    await ctx.send("Topics Refreshed!")
+    await ctx.message.add_reaction("🔄")
     
-
+@bot.command(name="format")
+async def format(ctx):
+    msg = ctx.message
+    if msg.reference:
+        try:
+             # Try to use the cached message first
+            original_message = msg.reference.resolved 
+            if original_message is None:
+                # If not in cache, fetch the message from the API
+                original_message = await msg.channel.fetch_message(msg.reference.message_id)
+            await msg.channel.send("```python\n"+original_message.content+"```")
+        except:
+            pass
+    else:
+        await ctx.send("Respond to a message to use this command.")
+    
 
 # Main entry point
 if __name__ == "__main__":
