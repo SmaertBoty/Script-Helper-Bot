@@ -2,19 +2,60 @@ import discord
 from discord.ext import commands
 import os
 from dotenv import load_dotenv
+import json
+import re
+
+with open("error_conversions.json","r", encoding="utf-8") as f:
+    error_conversions = json.load(f)
+    print(error_conversions)
+
+class LogModal(discord.ui.Modal, title="Upload Log"):
+
+    log = discord.ui.TextInput(
+        label="Paste your log",
+        style=discord.TextStyle.paragraph,
+        placeholder="Paste log to redact C:Users/#####/...\n" \
+        "If this isn't the main bot, be careful with what you share!",
+        required=True,
+        max_length=2000
+    )
+
+    async def on_submit(self, interaction: discord.Interaction):
+        content = self.log.value
+
+        anon_log = re.sub(r"(C:[/\\]Users[/\\])[^/\\]+", r"\1#####", content)
+    
+
+        await interaction.response.send_message(
+            "Anonymized Log:\n```\n"+anon_log+"```"
+        )
+        
+class FixModal(discord.ui.Modal, title="Upload Log"):
+
+    log = discord.ui.TextInput(
+        label="Paste your log",
+        style=discord.TextStyle.paragraph,
+        placeholder="Paste your log to get a quick fix.\n" \
+        "If this isn't the main bot, be careful with what you share!",
+        required=True,
+        max_length=2000
+    )
+
+    async def on_submit(self, interaction: discord.Interaction):
+        content = self.log.value
+
+        for line in content.splitlines():
+            for key in error_conversions.keys():
+                if key in line:
+                    with open("errors/"+error_conversions[key]+".md", "r") as f:
+                        await interaction.response.send_message(f.read(), ephemeral=True)
+                        return
+        
+        await interaction.response.send_message("Hmm.. nothing in the common error catologue.", ephemeral=True)
+
+    
 
 
-
-
-error_conversions = {"return future_value.wait()":"nomappings",
-                     "java.lang.ClassNotFoundException:":"nomappings",
-                     "error code -1073741515":"nodll",
-                     "name 'JavaClass' is not defined":"notpyjinn",
-                     "Exited with error code 9009":"nopython",
-                     "ModuleNotFoundError: No module named ":"nomodule"}
-
-
-common_community_modules = ["minescript_plus", "lib_ren", "java", "lib_java"]
 
 files = os.listdir("topics")
 topics = []
@@ -37,6 +78,7 @@ bot = commands.Bot(command_prefix="+", intents=intents, help_command=None)
 @bot.event
 async def on_ready():
     print(f"{bot.user} is online and ready!")
+    await bot.tree.sync()
     await bot.change_presence(activity=discord.Game("with you!"))
 
 # Example command
@@ -55,11 +97,14 @@ async def topic(ctx, page):
 
 @bot.command(name="refresh")
 async def refresh(ctx):
-    global topics
+    global topics, error_conversions
     files = os.listdir("topics")
     topics = []
     for topic in files:
         topics.append(topic.removesuffix(".md"))
+    
+    with open("error_conversions.json","r") as f:
+        error_conversions = json.load(f)
     await ctx.message.add_reaction("🔄")
     
 @bot.command(name="format")
@@ -77,12 +122,23 @@ async def format(ctx):
             pass
     else:
         await ctx.send("Respond to a message to use this command.")
+
+def find_fix(lines: str):
+    for line in lines:
+        for key in error_conversions.keys():
+            if key in line:
+                with open("errors/"+error_conversions[key]+".md","r") as f:
+                    
+                    return f.read()
     
+    return None
+
 @bot.command(name="quickfix")
 async def quickfix(ctx):
     msg = ctx.message
     original_message = None
     
+
     if msg.reference:
         try: 
             
@@ -100,6 +156,8 @@ async def quickfix(ctx):
         lines = msg.content.splitlines()
     else:
         lines = original_message.content.splitlines()
+    
+    
 
     for line in lines:
         for key in error_conversions.keys():
@@ -109,7 +167,14 @@ async def quickfix(ctx):
                     return
     
     await ctx.send("Hmm.. nothing in the common error catologue.")
-    
+
+@bot.tree.command(name="redactlog", description="Redact a log before uploading it.")
+async def upload_log(interaction: discord.Interaction):
+    await interaction.response.send_modal(LogModal())
+
+@bot.tree.command(name="quickfix", description="Upload a log to get a quick fix suggestion (not shown to others).")
+async def anon_fix(interaction: discord.Interaction):
+    await interaction.response.send_modal(FixModal())
 
 # Main entry point
 if __name__ == "__main__":

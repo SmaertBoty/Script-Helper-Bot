@@ -8,7 +8,7 @@ This bot is not hosted full-time currently, it's better to host it yourself for 
 
 ## Inviting to your server
 
-Want to invite this bot to your server? Click [here.](https://discord.com/oauth2/authorize?client_id=1482161929056419962&scope=bot&permissions=274877959232&response_type=code&redirect_uri=https%3A%2F%2Fgithub.com%2Fn-aoH%2FScript-Helper-Bot%2Fblob%2Fmain%2Fwelcome.md)
+Want to invite this bot to your server? Click [here.](https://discord.com/oauth2/authorize?client_id=1482161929056419962&scope=bot&permissions=277025442880&response_type=code&redirect_uri=https%3A%2F%2Fgithub.com%2Fn-aoH%2FScript-Helper-Bot%2Fblob%2Fmain%2Fwelcome.md)
 
 ## Adding a topic page
 

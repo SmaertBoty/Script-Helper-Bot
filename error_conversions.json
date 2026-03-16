@@ -1,0 +1,11 @@
+{
+
+
+"return future_value.wait()":"nomappings",
+"java.lang.ClassNotFoundException:":"nomappings",
+"error code -1073741515":"nodll",
+"name 'JavaClass' is not defined":"notpyjinn",
+"Exited with error code 9009":"nopython",
+"ModuleNotFoundError: No module named ":"nomodule"
+
+}
