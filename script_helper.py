@@ -43,7 +43,7 @@ class FixModal(discord.ui.Modal, title="Upload Log"):
 
     async def on_submit(self, interaction: discord.Interaction):
         content = self.log.value
-
+        
         for line in content.splitlines():
             for key in error_conversions.keys():
                 if key in line:
