@@ -27,7 +27,7 @@ class LogModal(discord.ui.Modal, title="Upload Log"):
     
 
         await interaction.response.send_message(
-            "Anonymized Log:\n```\n"+anon_log+"```"
+            "Redacted Log:\n```\n"+anon_log+"```"
         )
         
 class FixModal(discord.ui.Modal, title="Upload Log"):
