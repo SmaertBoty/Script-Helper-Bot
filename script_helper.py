@@ -87,13 +87,28 @@ async def ping(ctx):
     await ctx.send(f"Pong! {round(bot.latency * 1000)}ms")
 
 @bot.command(name="t")
-async def topic(ctx, page):
-    req = page.lower()
-    if req in topics:
-        with open("topics/"+req+".md","r") as f:
-            await ctx.send(f.read())
+async def topic(ctx, page=None):
+    
+    if not page is None:
+        
+        req = page.lower()
+        if req in topics:
+            with open("topics/"+req+".md","r") as f:
+                await ctx.send(f.read())
+        else:
+            await ctx.message.add_reaction("❌")
+    
     else:
-        await ctx.message.add_reaction("❌")
+        resp = """
+`+t topic` | Get information on a topic
+
+topics: 
+"""
+        for topic in topics:
+            resp += topic+", "
+        resp.removesuffix(", ")
+        
+        await ctx.send(resp)
 
 @bot.command(name="refresh")
 async def refresh(ctx):
@@ -122,6 +137,26 @@ async def format(ctx):
             pass
     else:
         await ctx.send("Respond to a message to use this command.")
+
+@bot.command(name="help")
+async def get_help(ctx):
+    resp = """
+**Welcome to the Script Helper bot!**
+Current commands:
+```
++t <topic>      | Quickly get information on a topic!
++quickfix <log> | Reply to or paste a log to get a quick fix!
++format         | Reply to a message to format as python code!
++refresh        | Refresh .md cache
++ping           | Get ping stats
+==== PRIVATE COMMANDS =====
+/quickfix       | Privately share a log and get a quick fix!
+/redactlog      | Paste a log to redact it!
+```
+"""
+
+    await ctx.send(resp)
+
 
 def find_fix(lines: str):
     for line in lines:
@@ -166,7 +201,10 @@ async def quickfix(ctx):
                     await ctx.send(f.read())
                     return
     
-    await ctx.send("Hmm.. nothing in the common error catologue.")
+    if msg.content == "+quickfix":
+        await ctx.send("`+quickfix` | Paste a log or respond to one to get a quick fix!")
+    else:
+        await ctx.send("Hmm.. nothing in the common error catologue.")
 
 @bot.tree.command(name="redactlog", description="Redact a log before uploading it.")
 async def upload_log(interaction: discord.Interaction):
