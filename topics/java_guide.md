@@ -3,7 +3,7 @@
 
 The way you access Java, in both Python and Pyjinn, is very similar
 
-For, you have to use the built-in Java library
+For Python you have to use the built-in Java library
 ```py
 import java
 
